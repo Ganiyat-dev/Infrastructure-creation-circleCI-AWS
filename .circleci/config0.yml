@@ -1,9 +1,8 @@
 version: 2.1
 # Use a package of configuration called an orb.
+# rollback job
 orbs:
   aws-cli: circleci/aws-cli@2.0.3
-# Define the jobs we want to run for this project
-
 commands:
   destroy_environment:
     steps:
@@ -12,6 +11,7 @@ commands:
           when: on_fail
           command: |
             aws cloudformation delete-stack --stack-name my-stack
+
 jobs:
   create_infrastructure: 
     docker:
@@ -27,25 +27,6 @@ jobs:
       - run: return 1
       - destroy_environment
 
-  # Exercise: Config and Deployment
-  configure_infrastructure:
-    docker:
-      - image: python:3.7-alpine3.11
-    steps:
-      - checkout
-      - add_ssh_keys:
-            # You can get this ID in the section where you registered the SSH Key
-            fingerprints: ["d1:54:49:9e:1e:c8:ff:95:fd:fc:a8:86:c9:95:4f:c2"] 
-      - run:
-          name: Install Ansible
-          command: |
-            # Install Ansible
-            apk add --update ansible
-      - run:
-          name: Run Playbook and Configure server
-          command: |
-            ansible-playbook -i inventory main-remote.yml
-  
   smoke_test:
     docker:
       - image: alpine:latest
@@ -62,13 +43,12 @@ jobs:
               return 1
             fi
       - destroy_environment
-          
 
-# Sequential workflow
 workflows:
-  # Name the workflow
-  myWorkflow:
+  my_workflow:
     jobs:
       - create_infrastructure
-      - configure_infrastructure
       - smoke_test
+
+
+  
