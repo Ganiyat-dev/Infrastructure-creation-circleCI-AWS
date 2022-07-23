@@ -1,6 +1,6 @@
 ---
 # setting up a web server in an EC
-- name:setting up a web server in an EC   
+- name: setting up a web server in an EC   
   # Use the public IP if the VM is already created
   hosts: ec2-3-83-107-99.compute-1.amazonaws.com
   # For Ubuntu instances, the user will be `ubuntu`
