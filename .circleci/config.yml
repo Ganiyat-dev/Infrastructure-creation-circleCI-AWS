@@ -31,7 +31,8 @@ jobs:
       - image: alpine:latest
     steps:
       - run: apk add --update curl
-          name: Smoke test
+      - run:
+          name: smoke test
           command: |
             URL="https://blog.udacity.com/"
             if curl -s --head ${URL}
